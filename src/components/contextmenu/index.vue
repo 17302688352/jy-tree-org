@@ -13,7 +13,7 @@
       <ul>
         <template v-for="item in menus">
           <li
-            v-if="editable || !['add', 'edit', 'delete'].includes(item.command)"
+            v-if="editable || !['add', 'edit', 'delete', 'addPath'].includes(item.command)"
             class="zm-tree-menu-item"
             :action="item.command"
             :key="item.command"
@@ -49,6 +49,7 @@ export default {
         pid: "pid",
         label: "label",
         expand: "expand",
+        url: "url",
         children: "children",
       }),
     },
@@ -129,6 +130,9 @@ export default {
         }
       }
     },
+    handleAddPath() {
+      this.$set(this.node, "focusUrl", true);
+    },
     handleMenu(e) {
       const el = e.target;
       if (el.className === "zm-tree-menu-item") {
@@ -145,6 +149,9 @@ export default {
             break;
           case "delete":
             this.handleDelete();
+            break;
+          case "addPath":
+            this.handleAddPath();
             break;
         }
         this.$emit("contextmenu", { command, node: this.node });
@@ -169,13 +176,14 @@ export default {
         this.nodeAdd(this.node);
         return;
       }
-      const { id, pid, label, expand, children } = this.props;
+      const { id, pid, label, expand, children, url } = this.props;
       const { node } = this;
       const json = {
         [id]: String(new Date().getTime()),
         [pid]: node[id],
         [label]: "",
         [expand]: false,
+        [url]: "",
         [children]: [],
         newNode: true,
         focused: true,

@@ -220,7 +220,8 @@
           pid: "pid",
           label: 'label',
           expand: 'expand',
-          children: 'children'
+          url: 'url',
+          children: 'children',
         },
         tools:{
           expand: true,

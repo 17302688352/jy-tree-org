@@ -134,6 +134,9 @@ export const renderLabel = (h, data, context, root) => {
   if (data.focused) {
     nodeLabelClass.push('is-edit')
   }
+  if (data.focusUrl) {
+    nodeLabelClass.push('is-url')
+  }
   // directives
   let cloneDirs 
   if(Array.isArray(directives)){
@@ -180,6 +183,25 @@ export const renderLabel = (h, data, context, root) => {
       focus: e => focusHandler && focusHandler(e, data),
       input: e => { data[props.props.label] = e.target.value },
       blur: e => { data.focused = false; blurHandler && blurHandler(e, data)},
+      click: e => e.stopPropagation()
+    }
+  }), h('input', {
+    'class': "tree-org-node__input",
+    'directives' :[{
+      name: 'show',
+      value: data.focusUrl
+    }, {
+      name: 'focus',
+      value: data.focusUrl
+    }],
+    "domProps":{
+      placeholder: "请输入路径",
+      value: data[props.props.url],
+    },
+    on: {
+      focus: e => focusHandler && focusHandler(e, data),
+      input: e => { data[props.props.url] = e.target.value },
+      blur: e => { data.focusUrl = false; blurHandler && blurHandler(e, data)},
       click: e => e.stopPropagation()
     }
   })])
